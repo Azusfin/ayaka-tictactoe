@@ -8,7 +8,7 @@ if (!token) throw new AyakaError("CONFIG", "AYAKA_TICTACTOE_TOKEN environment va
 
 export const mongoURL = process.env["AYAKA_TICTACTOE_MONGO_URL"]!
 
-if (!mongoURL) throw new AyakaError("CONFIG", "AYAKA_TICTACTOE_MONGO_URL environemtn variable must exist")
+if (!mongoURL) throw new AyakaError("CONFIG", "AYAKA_TICTACTOE_MONGO_URL environment variable must exist")
 
 export const embedColor = (process.env["AYAKA_TICTACTOE_EMBED_COLOR"] ?? "#40E0D0") as ColorResolvable
 export const maintenance = process.env["AYAKA_TICTACTOE_MAINTENANCE"] === "yes"

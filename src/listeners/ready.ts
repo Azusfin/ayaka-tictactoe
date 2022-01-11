@@ -36,10 +36,17 @@ export class ReadyEvent extends Listener {
 
         this.container.logger.info("Activity Has Been Set")
 
+        this.container.logger.info(`Logged In Client ${this.container.client.user!.tag}`)
+
+        this.container.logger.info("Connecting To Mongo Database...")
+
+        const before = Date.now()
+
         await this.container.client.db.connect()
 
-        this.container.logger.info("Connected To Database")
-
-        this.container.logger.info(`Logged In Client ${this.container.client.user!.tag}`)
+        this.container.logger.info(
+            "Connected To Mongo Database",
+            "-", `Took ${Date.now() - before}ms to connect`
+        )
     }
 }
