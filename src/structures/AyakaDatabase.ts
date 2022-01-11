@@ -4,19 +4,32 @@ import { mongoDatabase, mongoURL } from "../config";
 
 export class AyakaDatabase {
     public profile!: Mongo<TictactoeProfile>
+    public roles!: Mongo<TictactoeRoles>
 
     public async connect(): Promise<void> {
-        if (this.profile) return
+        if (
+            this.profile ||
+            this.roles
+        ) return
 
-        const mongoClient = new MongoClient(mongoURL, { maxPoolSize: 35 })
+        const mongoClient = new MongoClient(mongoURL, {
+            keepAlive: true,
+            maxPoolSize: 35
+        })
+
         const client = await mongoClient.connect()
-        const mongo = new Mongo<TictactoeProfile>({
+
+        this.profile = new Mongo({
             client,
             dbName: mongoDatabase,
             collectionName: "profile"
         })
 
-        this.profile = mongo
+        this.roles = new Mongo({
+            client,
+            dbName: mongoDatabase,
+            collectionName: "roles"
+        })
     }
 }
 
@@ -26,11 +39,21 @@ export interface TictactoeProfile {
     streak: number
     badges: string[]
     theme: TictactoeProfileTheme
+    lastDaily?: Date
 }
 
 export interface TictactoeProfileTheme {
     used: string
-    themes: string[]
+    owned: string[]
+}
+
+export type TictactoeRoles = Map<string, TictactoeRole>
+
+export interface TictactoeRole {
+    id: string
+    name: string
+    description: string
+    price: number
 }
 
 export function defaultProfile(guild: string, user: string): Doc<TictactoeProfile> {
@@ -43,8 +66,15 @@ export function defaultProfile(guild: string, user: string): Doc<TictactoeProfil
             badges: [],
             theme: {
                 used: "Ayaka",
-                themes: ["Ayaka"]
+                owned: ["Ayaka"]
             }
         }
+    }
+}
+
+export function defaultRoles(guild: string): Doc<TictactoeRoles> {
+    return {
+        key: guild,
+        value: new Map()
     }
 }
