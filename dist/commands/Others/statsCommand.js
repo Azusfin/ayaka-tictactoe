@@ -31,7 +31,7 @@ let statsCommand = class statsCommand extends framework_1.Command {
         const memoryOs = (memory.rss / 1024 / 1024).toFixed(2);
         const memoryJsTotal = (memory.heapTotal / 1024 / 1024).toFixed(2);
         const memoryJsUsed = (memory.heapUsed / 1024 / 1024).toFixed(2);
-        const memoryCpp = (memory.external / 1024 / 1024).toFixed(2);
+        const memoryExternal = (memory.external / 1024 / 1024).toFixed(2);
         const memoryBuffers = (memory.arrayBuffers / 1024 / 1024).toFixed(2);
         const embed = new discord_js_1.MessageEmbed()
             .setAuthor({
@@ -67,7 +67,7 @@ let statsCommand = class statsCommand extends framework_1.Command {
             value: `\`\`\`\nOS: ${memoryOs}MiB\n` +
                 `JsTotal: ${memoryJsTotal}MiB\n` +
                 `JsUsed: ${memoryJsUsed}MiB\n` +
-                `C++: ${memoryCpp}MiB\n` +
+                `External: ${memoryExternal}MiB\n` +
                 `Buffers: ${memoryBuffers}MiB\`\`\``
         })
             .setColor(config_1.embedColor);
