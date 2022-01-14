@@ -123,7 +123,7 @@ let MatchCommand = class MatchCommand extends framework_1.Command {
             componentType: "BUTTON",
             time: 300e3,
             filter: button => (status === tic_tac_toe_minimax_engine_1.GameStatus.ONGOING &&
-                game.players.includes(button.user.id))
+                game.players[game.playerID] === button.user.id)
         });
         collector.on("collect", async (button) => {
             await button.deferUpdate();

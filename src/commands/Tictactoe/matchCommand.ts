@@ -150,7 +150,7 @@ export class MatchCommand extends Command {
             time: 300e3,
             filter: button => (
                 status === GameStatus.ONGOING &&
-                    game!.players.includes(button.user.id)
+                    game!.players[game!.playerID] === button.user.id
             )
         })
 
