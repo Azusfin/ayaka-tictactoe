@@ -121,10 +121,16 @@ let MatchCommand = class MatchCommand extends framework_1.Command {
         const collector = msg.createMessageComponentCollector({
             componentType: "BUTTON",
             time: 300e3,
-            filter: button => (status === tic_tac_toe_minimax_engine_1.GameStatus.ONGOING &&
-                game.players[game.playerID] === button.user.id)
+            filter: button => (button.customId !== "tictactoe-delete"
+                ? status === tic_tac_toe_minimax_engine_1.GameStatus.ONGOING &&
+                    game.players[game.playerID] === button.user.id
+                : game.players.includes(button.user.id))
         });
         collector.on("collect", async (button) => {
+            if (button.customId === "tictactoe-delete") {
+                await button.deferUpdate();
+                collector.stop();
+            }
             const index = parseInt(button.customId.split("-")[1]);
             const columnIndex = index % 3;
             const rowIndex = Math.floor(index / 3);
@@ -166,10 +172,8 @@ let MatchCommand = class MatchCommand extends framework_1.Command {
                 winnerProfile.value.streak++;
                 winnerProfile.value.points += 1 + bonus;
                 await AyakaDatabase_1.db.setProfile(ctx.guildId, winner, winnerProfile.value);
-                embeds.push(new discord_js_1.MessageEmbed()
-                    .setDescription(`<@${winner}> Got 1 (+${bonus}) points\n` +
-                    `<@${loser}> Lose their streak`)
-                    .setColor(config_1.embedColor));
+                embeds.push(this.makeEmbed(`<@${winner}> Got 1 (+${bonus}) points\n` +
+                    `<@${loser}> Lose their streak`));
             }
             await ctx.editReply({
                 embeds,

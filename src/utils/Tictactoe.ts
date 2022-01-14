@@ -76,6 +76,17 @@ export class Tictactoe {
             rows.push(row)
         }
 
+        rows.push(
+            new MessageActionRow()
+                .addComponents(
+                    new MessageButton()
+                        .setLabel("🗑️")
+                        .setCustomId("tictactoe-delete")
+                        .setDisabled(end)
+                        .setStyle("SUCCESS")
+                )
+        )
+
         return rows
     }
 

@@ -148,12 +148,19 @@ export class MatchCommand extends Command {
             componentType: "BUTTON",
             time: 300e3,
             filter: button => (
-                status === GameStatus.ONGOING &&
-                    game!.players[game!.playerID] === button.user.id
+                button.customId !== "tictactoe-delete"
+                    ? status === GameStatus.ONGOING &&
+                        game!.players[game!.playerID] === button.user.id
+                    : game!.players.includes(button.user.id)
             )
         })
 
         collector.on("collect", async button => {
+            if (button.customId === "tictactoe-delete") {
+                await button.deferUpdate()
+                collector.stop()
+            }
+
             const index = parseInt(button.customId.split("-")[1])
 
             const columnIndex = index % 3
@@ -211,12 +218,10 @@ export class MatchCommand extends Command {
                 await db.setProfile(ctx.guildId!, winner, winnerProfile.value)
 
                 embeds.push(
-                    new MessageEmbed()
-                        .setDescription(
-                            `<@${winner}> Got 1 (+${bonus}) points\n` +
-                            `<@${loser}> Lose their streak`
-                        )
-                        .setColor(embedColor)
+                    this.makeEmbed(
+                        `<@${winner}> Got 1 (+${bonus}) points\n` +
+                        `<@${loser}> Lose their streak`
+                    )
                 )
             }
 

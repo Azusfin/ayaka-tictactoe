@@ -74,6 +74,12 @@ class Tictactoe {
             }
             rows.push(row);
         }
+        rows.push(new discord_js_1.MessageActionRow()
+            .addComponents(new discord_js_1.MessageButton()
+            .setLabel("🗑️")
+            .setCustomId("tictactoe-delete")
+            .setDisabled(end)
+            .setStyle("SUCCESS")));
         return rows;
     }
     buildEmbed(status, withTurn = true) {
