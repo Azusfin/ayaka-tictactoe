@@ -87,7 +87,7 @@ let MatchCommand = class MatchCommand extends framework_1.Command {
             : [user.id, ctx.user.id];
         const firstTurn = Math.random() > 0.5;
         game = new Tictactoe_1.Tictactoe(Themes_1.Ayaka, players, firstTurn);
-        const authorProfile = (await AyakaDatabase_1.db.profile.get(`${ctx.guildId}-${ctx.user.id}`) ??
+        const authorProfile = (await AyakaDatabase_1.db.getProfile(ctx.guildId, ctx.user.id) ??
             (0, AyakaDatabase_1.defaultProfile)(ctx.guildId, ctx.user.id)).value;
         game.theme = (0, Themes_1.themeOf)(authorProfile.theme.used);
         let status = tic_tac_toe_minimax_engine_1.GameStatus.ONGOING;
@@ -134,16 +134,17 @@ let MatchCommand = class MatchCommand extends framework_1.Command {
             if (status !== tic_tac_toe_minimax_engine_1.GameStatus.DRAW) {
                 const winner = game.players[game.playerID];
                 const loser = game.players.find(id => id !== winner);
-                const winnerProfile = await AyakaDatabase_1.db.profile.get(`${ctx.guildId}-${winner}`) ?? (0, AyakaDatabase_1.defaultProfile)(ctx.guildId, winner);
-                const loserProfile = await AyakaDatabase_1.db.profile.get(`${ctx.guildId}-${loser}`);
+                const winnerProfile = await AyakaDatabase_1.db.getProfile(ctx.guildId, winner) ??
+                    (0, AyakaDatabase_1.defaultProfile)(ctx.guildId, winner);
+                const loserProfile = await AyakaDatabase_1.db.getProfile(ctx.guildId, loser);
                 if (loserProfile) {
                     loserProfile.value.streak = 0;
-                    await AyakaDatabase_1.db.profile.set(`${ctx.guildId}-${loser}`, loserProfile.value);
+                    await AyakaDatabase_1.db.setProfile(ctx.guildId, loser, loserProfile.value);
                 }
                 const bonus = Math.floor(winnerProfile.value.streak * 1.45);
                 winnerProfile.value.streak++;
                 winnerProfile.value.points += 1 + bonus;
-                await AyakaDatabase_1.db.profile.set(`${ctx.guildId}-${winner}`, winnerProfile.value);
+                await AyakaDatabase_1.db.setProfile(ctx.guildId, winner, winnerProfile.value);
                 embeds.push(new discord_js_1.MessageEmbed()
                     .setDescription(`<@${winner}> Got 1 (+${bonus}) points\n` +
                     `<@${loser}> Lose their streak`)

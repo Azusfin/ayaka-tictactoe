@@ -16,8 +16,8 @@ export class statsCommand extends Command {
         const botAvatar = this.container.client.user!.displayAvatarURL({ format: "jpg" })
         const servers = this.container.client.guilds.cache.size.toLocaleString("en-us")
         const users = this.container.client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0)
-        const allCursor = await db.profile.all()
-        const players = await allCursor.cursor.count()
+        const cursor = await db.allProfiles()
+        const players = await cursor.cursor.count()
         const uptime = humanize(this.container.client.uptime!, { maxDecimalPoints: 0 })
         const library = "Discord.js"
         const botOwners = owners.map(

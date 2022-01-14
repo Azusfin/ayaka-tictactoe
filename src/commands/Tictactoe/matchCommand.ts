@@ -101,7 +101,7 @@ export class MatchCommand extends Command {
         game = new Tictactoe(Ayaka, players, firstTurn)
 
         const authorProfile = (
-            await db.profile.get(`${ctx.guildId!}-${ctx.user.id}`) ??
+            await db.getProfile(ctx.guildId!, ctx.user.id) ??
                 defaultProfile(ctx.guildId!, ctx.user.id)
         ).value
 
@@ -163,14 +163,15 @@ export class MatchCommand extends Command {
 
             if (status !== GameStatus.DRAW) {
                 const winner = game!.players[game!.playerID]
-                const loser = game!.players.find(id => id !== winner)
+                const loser = game!.players.find(id => id !== winner)!
 
-                const winnerProfile = await db.profile.get(`${ctx.guildId!}-${winner}`) ?? defaultProfile(ctx.guildId!, winner)
-                const loserProfile = await db.profile.get(`${ctx.guildId!}-${loser}`)
+                const winnerProfile = await db.getProfile(ctx.guildId!, winner) ??
+                    defaultProfile(ctx.guildId!, winner)
+                const loserProfile = await db.getProfile(ctx.guildId!, loser)
 
                 if (loserProfile) {
                     loserProfile.value.streak = 0
-                    await db.profile.set(`${ctx.guildId!}-${loser}`, loserProfile.value)
+                    await db.setProfile(ctx.guildId!, loser, loserProfile.value)
                 }
 
                 const bonus = Math.floor(winnerProfile.value.streak * 1.45)
@@ -178,7 +179,7 @@ export class MatchCommand extends Command {
                 winnerProfile.value.streak++
                 winnerProfile.value.points += 1 + bonus
 
-                await db.profile.set(`${ctx.guildId!}-${winner}`, winnerProfile.value)
+                await db.setProfile(ctx.guildId!, winner, winnerProfile.value)
 
                 embeds.push(
                     new MessageEmbed()

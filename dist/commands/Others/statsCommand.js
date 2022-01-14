@@ -23,8 +23,8 @@ let statsCommand = class statsCommand extends framework_1.Command {
         const botAvatar = this.container.client.user.displayAvatarURL({ format: "jpg" });
         const servers = this.container.client.guilds.cache.size.toLocaleString("en-us");
         const users = this.container.client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0);
-        const allCursor = await AyakaDatabase_1.db.profile.all();
-        const players = await allCursor.cursor.count();
+        const cursor = await AyakaDatabase_1.db.allProfiles();
+        const players = await cursor.cursor.count();
         const uptime = (0, humanize_duration_1.default)(this.container.client.uptime, { maxDecimalPoints: 0 });
         const library = "Discord.js";
         const botOwners = config_1.owners.map(ownerID => this.container.client.users.cache.get(ownerID)?.tag ?? `${ownerID} (N/A)`).join("\n");
