@@ -126,12 +126,12 @@ let MatchCommand = class MatchCommand extends framework_1.Command {
                 game.players[game.playerID] === button.user.id)
         });
         collector.on("collect", async (button) => {
-            await button.deferUpdate();
             const index = parseInt(button.customId.split("-")[1]);
             const columnIndex = index % 3;
             const rowIndex = Math.floor(index / 3);
             if (game.cells[index] !== tic_tac_toe_minimax_engine_1.Cell.EMPTY)
                 return;
+            await button.deferUpdate();
             status = game.fill(rowIndex, columnIndex);
             const img = await game.draw();
             const attachment = new discord_js_1.MessageAttachment(img, "tictactoe.jpg");

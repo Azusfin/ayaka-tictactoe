@@ -155,14 +155,14 @@ export class MatchCommand extends Command {
         })
 
         collector.on("collect", async button => {
-            await button.deferUpdate()
-
             const index = parseInt(button.customId.split("-")[1])
 
             const columnIndex = index % 3
             const rowIndex = Math.floor(index / 3)
 
             if (game!.cells[index] !== Cell.EMPTY) return
+
+            await button.deferUpdate()
 
             status = game!.fill(rowIndex, columnIndex)
 
