@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.defaultRoles = exports.defaultProfile = exports.AyakaDatabase = void 0;
+exports.defaultRoles = exports.defaultProfile = exports.db = exports.AyakaDatabase = void 0;
 const aoi_mongo_1 = require("aoi.mongo");
 const mongodb_1 = require("mongodb");
 const config_1 = require("../config");
@@ -27,6 +27,7 @@ class AyakaDatabase {
     }
 }
 exports.AyakaDatabase = AyakaDatabase;
+exports.db = new AyakaDatabase();
 function defaultProfile(guild, user) {
     return {
         key: `${guild}-${user}`,

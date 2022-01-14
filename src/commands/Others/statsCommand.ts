@@ -4,6 +4,7 @@ import { CommandInteraction, MessageEmbed } from "discord.js";
 import { embedColor, owners } from "../../config";
 import humanize from "humanize-duration"
 import { register } from "../../utils/Util";
+import { db } from "../../structures/AyakaDatabase";
 
 @ApplyOptions<CommandOptions>({
     name: "stats",
@@ -15,7 +16,7 @@ export class statsCommand extends Command {
         const botAvatar = this.container.client.user!.displayAvatarURL({ format: "jpg" })
         const servers = this.container.client.guilds.cache.size.toLocaleString("en-us")
         const users = this.container.client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0)
-        const allCursor = await this.container.client.db.profile.all()
+        const allCursor = await db.profile.all()
         const players = await allCursor.cursor.count()
         const uptime = humanize(this.container.client.uptime!, { maxDecimalPoints: 0 })
         const library = "Discord.js"

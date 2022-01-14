@@ -2,6 +2,7 @@ import { ApplyOptions } from "@sapphire/decorators"
 import { ListenerOptions, Listener } from "@sapphire/framework"
 import { Team } from "discord.js"
 import { owners } from "../config"
+import { db } from "../structures/AyakaDatabase"
 
 @ApplyOptions<ListenerOptions>({
     name: "ready",
@@ -42,7 +43,7 @@ export class ReadyEvent extends Listener {
 
         const before = Date.now()
 
-        await this.container.client.db.connect()
+        await db.connect()
 
         this.container.logger.info(
             "Connected To Mongo Database",

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.register = void 0;
+exports.numEmojis = exports.register = void 0;
 const config_1 = require("../config");
 function register(registry, builder) {
     registry.registerChatInputCommand(builder, {
@@ -15,3 +15,8 @@ function register(registry, builder) {
     }
 }
 exports.register = register;
+exports.numEmojis = [
+    "1️⃣", "2️⃣", "3️⃣",
+    "4️⃣", "5️⃣", "6️⃣",
+    "7️⃣", "8️⃣", "9️⃣"
+];

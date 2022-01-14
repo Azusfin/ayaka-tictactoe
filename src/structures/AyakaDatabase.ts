@@ -1,6 +1,7 @@
 import { Doc, Mongo } from "aoi.mongo";
 import { MongoClient } from "mongodb";
 import { mongoDatabase, mongoURL } from "../config";
+import { Themes } from "../utils/Themes";
 
 export class AyakaDatabase {
     public profile!: Mongo<TictactoeProfile>
@@ -33,6 +34,8 @@ export class AyakaDatabase {
     }
 }
 
+export const db = new AyakaDatabase()
+
 export interface TictactoeProfile {
     bio: string
     points: number
@@ -43,8 +46,8 @@ export interface TictactoeProfile {
 }
 
 export interface TictactoeProfileTheme {
-    used: string
-    owned: string[]
+    used: Themes
+    owned: Themes[]
 }
 
 export type TictactoeRoles = Map<string, TictactoeRole>

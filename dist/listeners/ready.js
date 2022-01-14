@@ -11,6 +11,7 @@ const decorators_1 = require("@sapphire/decorators");
 const framework_1 = require("@sapphire/framework");
 const discord_js_1 = require("discord.js");
 const config_1 = require("../config");
+const AyakaDatabase_1 = require("../structures/AyakaDatabase");
 let ReadyEvent = class ReadyEvent extends framework_1.Listener {
     async run() {
         this.container.logger.info("Configurations Loaded");
@@ -34,7 +35,7 @@ let ReadyEvent = class ReadyEvent extends framework_1.Listener {
         this.container.logger.info(`Logged In Client ${this.container.client.user.tag}`);
         this.container.logger.info("Connecting To Mongo Database...");
         const before = Date.now();
-        await this.container.client.db.connect();
+        await AyakaDatabase_1.db.connect();
         this.container.logger.info("Connected To Mongo Database", "-", `Took ${Date.now() - before}ms to connect`);
     }
 };

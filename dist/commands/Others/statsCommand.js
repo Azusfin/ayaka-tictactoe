@@ -16,13 +16,14 @@ const discord_js_1 = require("discord.js");
 const config_1 = require("../../config");
 const humanize_duration_1 = __importDefault(require("humanize-duration"));
 const Util_1 = require("../../utils/Util");
+const AyakaDatabase_1 = require("../../structures/AyakaDatabase");
 let statsCommand = class statsCommand extends framework_1.Command {
     async chatInputRun(interaction) {
         const botName = this.container.client.user.username;
         const botAvatar = this.container.client.user.displayAvatarURL({ format: "jpg" });
         const servers = this.container.client.guilds.cache.size.toLocaleString("en-us");
         const users = this.container.client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0);
-        const allCursor = await this.container.client.db.profile.all();
+        const allCursor = await AyakaDatabase_1.db.profile.all();
         const players = await allCursor.cursor.count();
         const uptime = (0, humanize_duration_1.default)(this.container.client.uptime, { maxDecimalPoints: 0 });
         const library = "Discord.js";
