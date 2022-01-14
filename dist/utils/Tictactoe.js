@@ -23,6 +23,9 @@ exports.Tictactoe = exports.guildsGames = void 0;
 const cairo_1 = require("canvas-constructor/cairo");
 const XO_1 = require("./img/XO");
 const tic_tac_toe_minimax_engine_1 = __importStar(require("tic-tac-toe-minimax-engine"));
+const discord_js_1 = require("discord.js");
+const Util_1 = require("./Util");
+const config_1 = require("../config");
 exports.guildsGames = new Map();
 class Tictactoe {
     constructor(theme, players, firstTurn) {
@@ -51,6 +54,68 @@ class Tictactoe {
                 : tic_tac_toe_minimax_engine_1.Player.PLAYER_ONE;
         }
         return status;
+    }
+    buildRows(end = false) {
+        const rows = [];
+        for (let i = 0; i < this.cells.length; i += 3) {
+            const row = new discord_js_1.MessageActionRow();
+            for (let j = 0; j < 3; j++) {
+                const index = i + j;
+                const cell = this.cells[index];
+                row.addComponents(new discord_js_1.MessageButton()
+                    .setLabel(Util_1.numEmojis[index])
+                    .setCustomId(`tictactoe-${index}`)
+                    .setDisabled(end || cell !== tic_tac_toe_minimax_engine_1.Cell.EMPTY)
+                    .setStyle(cell === tic_tac_toe_minimax_engine_1.Cell.EMPTY
+                    ? "SECONDARY"
+                    : cell === tic_tac_toe_minimax_engine_1.Cell.PLAYER_ONE_TAKEN
+                        ? "DANGER"
+                        : "PRIMARY"));
+            }
+            rows.push(row);
+        }
+        return rows;
+    }
+    buildEmbed(status, withTurn = true) {
+        const embed = new discord_js_1.MessageEmbed()
+            .setTitle("Tictactoe")
+            .addFields({
+            name: "Player One",
+            value: `<@${this.players[0]}>`,
+            inline: true
+        }, {
+            name: "Player Two",
+            value: `<@${this.players[1]}>`,
+            inline: true
+        })
+            .setColor(config_1.embedColor)
+            .setImage("attachment://tictactoe.jpg");
+        const player = this.players[this.playerID];
+        if (status === tic_tac_toe_minimax_engine_1.GameStatus.ONGOING) {
+            if (withTurn) {
+                embed.addFields({
+                    name: "Turn",
+                    value: `<@${player}>`
+                });
+            }
+        }
+        else if (status === tic_tac_toe_minimax_engine_1.GameStatus.DRAW) {
+            embed.addFields({
+                name: "Status",
+                value: "No one wins"
+            });
+        }
+        else {
+            embed.addFields({
+                name: "Status",
+                value: `<@${player}> Win`
+            });
+        }
+        return embed;
+    }
+    async buildImg(status) {
+        const img = await this.draw(status);
+        return new discord_js_1.MessageAttachment(img, "tictactoe.jpg");
     }
     async draw(status) {
         const { theme, cells, turn } = this;

@@ -2,6 +2,9 @@ import { Theme } from "./Themes"
 import { Canvas } from "canvas-constructor/cairo"
 import { OImg, XImg } from "./img/XO"
 import TictactoeEngine, { Player, Cell, GameStatus } from "tic-tac-toe-minimax-engine"
+import { MessageActionRow, MessageAttachment, MessageButton, MessageEmbed } from "discord.js"
+import { numEmojis } from "./Util"
+import { embedColor } from "../config"
 
 export type guildGames = Map<string, Tictactoe>
 export const guildsGames = new Map<string, guildGames>()
@@ -45,7 +48,82 @@ export class Tictactoe {
         return status
     }
 
-    async draw(status?: GameStatus): Promise<Buffer> {
+    public buildRows(end = false): MessageActionRow[] {
+        const rows: MessageActionRow[] = []
+
+        for (let i = 0; i < this.cells.length; i += 3) {
+            const row = new MessageActionRow()
+
+            for (let j = 0; j < 3; j++) {
+                const index = i + j
+                const cell = this.cells[index]
+
+                row.addComponents(
+                    new MessageButton()
+                        .setLabel(numEmojis[index])
+                        .setCustomId(`tictactoe-${index}`)
+                        .setDisabled(end || cell !== Cell.EMPTY)
+                        .setStyle(
+                            cell === Cell.EMPTY
+                                ? "SECONDARY"
+                                : cell === Cell.PLAYER_ONE_TAKEN
+                                    ? "DANGER"
+                                    : "PRIMARY"
+                        )
+                )
+            }
+
+            rows.push(row)
+        }
+
+        return rows
+    }
+
+    public buildEmbed(status: GameStatus, withTurn = true): MessageEmbed {
+        const embed = new MessageEmbed()
+            .setTitle("Tictactoe")
+            .addFields({
+                name: "Player One",
+                value: `<@${this.players[0]}>`,
+                inline: true
+            }, {
+                name: "Player Two",
+                value: `<@${this.players[1]}>`,
+                inline: true
+            })
+            .setColor(embedColor)
+            .setImage("attachment://tictactoe.jpg")
+
+        const player = this.players[this.playerID]
+
+        if (status === GameStatus.ONGOING) {
+            if (withTurn) {
+                embed.addFields({
+                    name: "Turn",
+                    value: `<@${player}>`
+                })
+            }
+        } else if (status === GameStatus.DRAW) {
+            embed.addFields({
+                name: "Status",
+                value: "No one wins"
+            })
+        } else {
+            embed.addFields({
+                name: "Status",
+                value: `<@${player}> Win`
+            })
+        }
+
+        return embed
+    }
+
+    public async buildImg(status?: GameStatus): Promise<MessageAttachment> {
+        const img = await this.draw(status)
+        return new MessageAttachment(img, "tictactoe.jpg")
+    }
+
+    private async draw(status?: GameStatus): Promise<Buffer> {
         const { theme, cells, turn } = this
 
         const canvas = new Canvas(theme.size.width, theme.size.height)

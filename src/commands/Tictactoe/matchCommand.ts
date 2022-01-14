@@ -1,12 +1,12 @@
 import { ApplyOptions } from "@sapphire/decorators";
 import { ApplicationCommandRegistry, Command, CommandOptions } from "@sapphire/framework";
-import { CommandInteraction, Message, MessageActionRow, MessageAttachment, MessageButton, MessageEmbed } from "discord.js";
+import { CommandInteraction, Message, MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
 import { Cell, GameStatus } from "tic-tac-toe-minimax-engine";
 import { embedColor } from "../../config";
 import { db, defaultProfile } from "../../structures/AyakaDatabase";
 import { Ayaka, themeOf } from "../../utils/Themes";
 import { guildsGames, Tictactoe } from "../../utils/Tictactoe";
-import { numEmojis, register } from "../../utils/Util"
+import { register } from "../../utils/Util"
 
 @ApplyOptions<CommandOptions>({
     name: "match",
@@ -135,14 +135,13 @@ export class MatchCommand extends Command {
 
         let status = GameStatus.ONGOING
 
-        const mainImg = await game.draw()
-        const mainAttachment = new MessageAttachment(mainImg, "tictactoe.jpg")
-        const mainEmbed = this.buildEmbed(game, status)
+        const mainAttachment = await game.buildImg()
+        const mainEmbed = game.buildEmbed(status)
 
         await ctx.editReply({
             files: [mainAttachment],
             embeds: [mainEmbed],
-            components: this.buildRows(game)
+            components: game.buildRows()
         })
 
         const collector = msg.createMessageComponentCollector({
@@ -166,14 +165,13 @@ export class MatchCommand extends Command {
 
             status = game!.fill(rowIndex, columnIndex)
 
-            const img = await game!.draw()
-            const attachment = new MessageAttachment(img, "tictactoe.jpg")
-            const embed = this.buildEmbed(game!, status)
+            const attachment = await game!.buildImg()
+            const embed = game!.buildEmbed(status)
 
             await ctx.editReply({
                 files: [attachment],
                 embeds: [embed],
-                components: this.buildRows(game!)
+                components: game!.buildRows()
             })
 
             if (status !== GameStatus.ONGOING) collector.stop()
@@ -188,9 +186,8 @@ export class MatchCommand extends Command {
 
             guildsGames.set(ctx.guildId!, games)
 
-            const img = await game!.draw(status)
-            const attachment = new MessageAttachment(img, "tictactoe.jpg")
-            const embed = this.buildEmbed(game!, status)
+            const attachment = await game!.buildImg(status)
+            const embed = game!.buildEmbed(status)
             const embeds = [embed]
 
             if (status !== GameStatus.DRAW) {
@@ -226,7 +223,7 @@ export class MatchCommand extends Command {
             await ctx.editReply({
                 embeds,
                 files: [attachment],
-                components: this.buildRows(game!, true)
+                components: game!.buildRows(true)
             })
         })
     }
@@ -254,73 +251,5 @@ export class MatchCommand extends Command {
         return new MessageEmbed()
             .setDescription(content)
             .setColor(embedColor)
-    }
-
-    private buildRows(game: Tictactoe, end = false): MessageActionRow[] {
-        const rows: MessageActionRow[] = []
-
-        for (let i = 0; i < game.cells.length; i += 3) {
-            const row = new MessageActionRow()
-
-            for (let j = 0; j < 3; j++) {
-                const index = i + j
-                const cell = game.cells[index]
-
-                row.addComponents(
-                    new MessageButton()
-                        .setLabel(numEmojis[index])
-                        .setCustomId(`tictactoe-${index}`)
-                        .setDisabled(end || cell !== Cell.EMPTY)
-                        .setStyle(
-                            cell === Cell.EMPTY
-                                ? "SECONDARY"
-                                : cell === Cell.PLAYER_ONE_TAKEN
-                                    ? "DANGER"
-                                    : "PRIMARY"
-                        )
-                )
-            }
-
-            rows.push(row)
-        }
-
-        return rows
-    }
-
-    private buildEmbed(game: Tictactoe, status: GameStatus): MessageEmbed {
-        const embed = new MessageEmbed()
-            .setTitle("Tictactoe")
-            .addFields({
-                name: "Player One",
-                value: `<@${game.players[0]}>`,
-                inline: true
-            }, {
-                name: "Player Two",
-                value: `<@${game.players[1]}>`,
-                inline: true
-            })
-            .setColor(embedColor)
-            .setImage("attachment://tictactoe.jpg")
-
-        const player = game.players[game.playerID]
-
-        if (status === GameStatus.ONGOING) {
-            embed.addFields({
-                name: "Turn",
-                value: `<@${player}>`
-            })
-        } else if (status === GameStatus.DRAW) {
-            embed.addFields({
-                name: "Status",
-                value: "No one wins"
-            })
-        } else {
-            embed.addFields({
-                name: "Status",
-                value: `<@${player}> Win`
-            })
-        }
-
-        return embed
     }
 }

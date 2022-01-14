@@ -111,13 +111,12 @@ let MatchCommand = class MatchCommand extends framework_1.Command {
             (0, AyakaDatabase_1.defaultProfile)(ctx.guildId, ctx.user.id)).value;
         game.theme = (0, Themes_1.themeOf)(authorProfile.theme.used);
         let status = tic_tac_toe_minimax_engine_1.GameStatus.ONGOING;
-        const mainImg = await game.draw();
-        const mainAttachment = new discord_js_1.MessageAttachment(mainImg, "tictactoe.jpg");
-        const mainEmbed = this.buildEmbed(game, status);
+        const mainAttachment = await game.buildImg();
+        const mainEmbed = game.buildEmbed(status);
         await ctx.editReply({
             files: [mainAttachment],
             embeds: [mainEmbed],
-            components: this.buildRows(game)
+            components: game.buildRows()
         });
         const collector = msg.createMessageComponentCollector({
             componentType: "BUTTON",
@@ -133,13 +132,12 @@ let MatchCommand = class MatchCommand extends framework_1.Command {
                 return;
             await button.deferUpdate();
             status = game.fill(rowIndex, columnIndex);
-            const img = await game.draw();
-            const attachment = new discord_js_1.MessageAttachment(img, "tictactoe.jpg");
-            const embed = this.buildEmbed(game, status);
+            const attachment = await game.buildImg();
+            const embed = game.buildEmbed(status);
             await ctx.editReply({
                 files: [attachment],
                 embeds: [embed],
-                components: this.buildRows(game)
+                components: game.buildRows()
             });
             if (status !== tic_tac_toe_minimax_engine_1.GameStatus.ONGOING)
                 collector.stop();
@@ -151,9 +149,8 @@ let MatchCommand = class MatchCommand extends framework_1.Command {
             games.delete(ctx.user.id);
             games.delete(user.id);
             Tictactoe_1.guildsGames.set(ctx.guildId, games);
-            const img = await game.draw(status);
-            const attachment = new discord_js_1.MessageAttachment(img, "tictactoe.jpg");
-            const embed = this.buildEmbed(game, status);
+            const attachment = await game.buildImg(status);
+            const embed = game.buildEmbed(status);
             const embeds = [embed];
             if (status !== tic_tac_toe_minimax_engine_1.GameStatus.DRAW) {
                 const winner = game.players[game.playerID];
@@ -177,7 +174,7 @@ let MatchCommand = class MatchCommand extends framework_1.Command {
             await ctx.editReply({
                 embeds,
                 files: [attachment],
-                components: this.buildRows(game, true)
+                components: game.buildRows(true)
             });
         });
     }
@@ -197,62 +194,6 @@ let MatchCommand = class MatchCommand extends framework_1.Command {
         return new discord_js_1.MessageEmbed()
             .setDescription(content)
             .setColor(config_1.embedColor);
-    }
-    buildRows(game, end = false) {
-        const rows = [];
-        for (let i = 0; i < game.cells.length; i += 3) {
-            const row = new discord_js_1.MessageActionRow();
-            for (let j = 0; j < 3; j++) {
-                const index = i + j;
-                const cell = game.cells[index];
-                row.addComponents(new discord_js_1.MessageButton()
-                    .setLabel(Util_1.numEmojis[index])
-                    .setCustomId(`tictactoe-${index}`)
-                    .setDisabled(end || cell !== tic_tac_toe_minimax_engine_1.Cell.EMPTY)
-                    .setStyle(cell === tic_tac_toe_minimax_engine_1.Cell.EMPTY
-                    ? "SECONDARY"
-                    : cell === tic_tac_toe_minimax_engine_1.Cell.PLAYER_ONE_TAKEN
-                        ? "DANGER"
-                        : "PRIMARY"));
-            }
-            rows.push(row);
-        }
-        return rows;
-    }
-    buildEmbed(game, status) {
-        const embed = new discord_js_1.MessageEmbed()
-            .setTitle("Tictactoe")
-            .addFields({
-            name: "Player One",
-            value: `<@${game.players[0]}>`,
-            inline: true
-        }, {
-            name: "Player Two",
-            value: `<@${game.players[1]}>`,
-            inline: true
-        })
-            .setColor(config_1.embedColor)
-            .setImage("attachment://tictactoe.jpg");
-        const player = game.players[game.playerID];
-        if (status === tic_tac_toe_minimax_engine_1.GameStatus.ONGOING) {
-            embed.addFields({
-                name: "Turn",
-                value: `<@${player}>`
-            });
-        }
-        else if (status === tic_tac_toe_minimax_engine_1.GameStatus.DRAW) {
-            embed.addFields({
-                name: "Status",
-                value: "No one wins"
-            });
-        }
-        else {
-            embed.addFields({
-                name: "Status",
-                value: `<@${player}> Win`
-            });
-        }
-        return embed;
     }
 };
 MatchCommand = __decorate([
