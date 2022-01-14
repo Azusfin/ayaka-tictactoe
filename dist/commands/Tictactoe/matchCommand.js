@@ -26,7 +26,7 @@ let MatchCommand = class MatchCommand extends framework_1.Command {
             });
             return;
         }
-        const games = Tictactoe_1.guildsGames.get(ctx.guildId) ?? new Map();
+        let games = Tictactoe_1.guildsGames.get(ctx.guildId) ?? new Map();
         let game = games.get(ctx.user.id);
         if (game) {
             await ctx.reply({
@@ -82,11 +82,31 @@ let MatchCommand = class MatchCommand extends framework_1.Command {
             });
             return;
         }
+        games = Tictactoe_1.guildsGames.get(ctx.guildId) ?? new Map();
+        game = games.get(ctx.user.id);
+        if (game) {
+            await ctx.editReply({
+                embeds: [this.makeEmbed(`You still had a game with <@${game.players.find(id => id !== ctx.user.id)}>`)],
+                components: []
+            });
+            return;
+        }
+        game = games.get(user.id);
+        if (game) {
+            await ctx.editReply({
+                embeds: [this.makeEmbed(`They still had a game with <@${game.players.find(id => id !== user.id)}>`)],
+                components: []
+            });
+            return;
+        }
         const players = Math.round(Math.random())
             ? [ctx.user.id, user.id]
             : [user.id, ctx.user.id];
         const firstTurn = Math.random() > 0.5;
         game = new Tictactoe_1.Tictactoe(Themes_1.Ayaka, players, firstTurn);
+        games.set(ctx.user.id, game);
+        games.set(user.id, game);
+        Tictactoe_1.guildsGames.set(ctx.guildId, games);
         const authorProfile = (await AyakaDatabase_1.db.getProfile(ctx.guildId, ctx.user.id) ??
             (0, AyakaDatabase_1.defaultProfile)(ctx.guildId, ctx.user.id)).value;
         game.theme = (0, Themes_1.themeOf)(authorProfile.theme.used);
@@ -127,6 +147,10 @@ let MatchCommand = class MatchCommand extends framework_1.Command {
         collector.once("end", async () => {
             if (status === tic_tac_toe_minimax_engine_1.GameStatus.ONGOING)
                 status = tic_tac_toe_minimax_engine_1.GameStatus.DRAW;
+            games = Tictactoe_1.guildsGames.get(ctx.guildId) ?? new Map();
+            games.delete(ctx.user.id);
+            games.delete(user.id);
+            Tictactoe_1.guildsGames.set(ctx.guildId, games);
             const img = await game.draw(status);
             const attachment = new discord_js_1.MessageAttachment(img, "tictactoe.jpg");
             const embed = this.buildEmbed(game, status);

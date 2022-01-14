@@ -26,7 +26,7 @@ export class MatchCommand extends Command {
             return
         }
 
-        const games = guildsGames.get(ctx.guildId!) ?? new Map<string, Tictactoe>()
+        let games = guildsGames.get(ctx.guildId!) ?? new Map<string, Tictactoe>()
         let game = games.get(ctx.user.id)
 
         if (game) {
@@ -93,12 +93,38 @@ export class MatchCommand extends Command {
             return
         }
 
+        games = guildsGames.get(ctx.guildId!) ?? new Map<string, Tictactoe>()
+        game = games.get(ctx.user.id)
+
+        if (game) {
+            await ctx.editReply({
+                embeds: [this.makeEmbed(`You still had a game with <@${game.players.find(id => id !== ctx.user.id)}>`)],
+                components: []
+            })
+            return
+        }
+
+        game = games.get(user.id)
+
+        if (game) {
+            await ctx.editReply({
+                embeds: [this.makeEmbed(`They still had a game with <@${game.players.find(id => id !== user.id)}>`)],
+                components: []
+            })
+            return
+        }
+
         const players: [string, string] = Math.round(Math.random())
             ? [ctx.user.id, user.id]
             : [user.id, ctx.user.id]
         const firstTurn = Math.random() > 0.5
 
         game = new Tictactoe(Ayaka, players, firstTurn)
+
+        games.set(ctx.user.id, game)
+        games.set(user.id, game)
+
+        guildsGames.set(ctx.guildId!, games)
 
         const authorProfile = (
             await db.getProfile(ctx.guildId!, ctx.user.id) ??
@@ -155,6 +181,12 @@ export class MatchCommand extends Command {
 
         collector.once("end", async () => {
             if (status === GameStatus.ONGOING) status = GameStatus.DRAW
+
+            games = guildsGames.get(ctx.guildId!) ?? new Map<string, Tictactoe>()
+            games.delete(ctx.user.id)
+            games.delete(user.id)
+
+            guildsGames.set(ctx.guildId!, games)
 
             const img = await game!.draw(status)
             const attachment = new MessageAttachment(img, "tictactoe.jpg")

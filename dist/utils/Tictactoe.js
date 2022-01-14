@@ -19,11 +19,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Tictactoe = exports.guildsGames = exports.guildGames = void 0;
+exports.Tictactoe = exports.guildsGames = void 0;
 const cairo_1 = require("canvas-constructor/cairo");
 const XO_1 = require("./img/XO");
 const tic_tac_toe_minimax_engine_1 = __importStar(require("tic-tac-toe-minimax-engine"));
-exports.guildGames = new Map();
 exports.guildsGames = new Map();
 class Tictactoe {
     constructor(theme, players, firstTurn) {

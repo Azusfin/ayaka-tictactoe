@@ -3,8 +3,8 @@ import { Canvas } from "canvas-constructor/cairo"
 import { OImg, XImg } from "./img/XO"
 import TictactoeEngine, { Player, Cell, GameStatus } from "tic-tac-toe-minimax-engine"
 
-export const guildGames = new Map<string, Tictactoe>()
-export const guildsGames = new Map<string, Map<string, Tictactoe>>()
+export type guildGames = Map<string, Tictactoe>
+export const guildsGames = new Map<string, guildGames>()
 
 export class Tictactoe {
     public theme: Theme
