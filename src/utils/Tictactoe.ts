@@ -80,8 +80,8 @@ export class Tictactoe {
             new MessageActionRow()
                 .addComponents(
                     new MessageButton()
-                        .setLabel("🗑️")
-                        .setCustomId("tictactoe-delete")
+                        .setLabel("⏰")
+                        .setCustomId("tictactoe-end")
                         .setDisabled(end)
                         .setStyle("SUCCESS")
                 )

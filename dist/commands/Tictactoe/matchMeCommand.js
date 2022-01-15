@@ -54,11 +54,11 @@ let MatchMeCommand = class MatchMeCommand extends framework_1.Command {
         const collector = msg.createMessageComponentCollector({
             componentType: "BUTTON",
             time: 300e3,
-            filter: button => (ctx.user.id === button.user.id && (button.customId === "tictactoe-delete" ||
+            filter: button => (ctx.user.id === button.user.id && (button.customId === "tictactoe-end" ||
                 status === tic_tac_toe_minimax_engine_1.GameStatus.ONGOING))
         });
         collector.on("collect", async (button) => {
-            if (button.customId === "tictactoe-delete") {
+            if (button.customId === "tictactoe-end") {
                 await button.deferUpdate();
                 collector.stop();
             }
@@ -122,7 +122,7 @@ let MatchMeCommand = class MatchMeCommand extends framework_1.Command {
 MatchMeCommand = __decorate([
     (0, decorators_1.ApplyOptions)({
         name: "matchme",
-        description: "Challenge me (The Unbeatable Tictactoe AI) to play tictactoe",
+        description: "Challenge me to play tictactoe",
         preconditions: ["allowMaintenance", "GuildOnly"]
     })
 ], MatchMeCommand);

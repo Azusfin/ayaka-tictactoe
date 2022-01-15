@@ -148,7 +148,7 @@ export class MatchCommand extends Command {
             componentType: "BUTTON",
             time: 300e3,
             filter: button => (
-                button.customId !== "tictactoe-delete"
+                button.customId !== "tictactoe-end"
                     ? status === GameStatus.ONGOING &&
                         game!.players[game!.playerID] === button.user.id
                     : game!.players.includes(button.user.id)
@@ -156,7 +156,7 @@ export class MatchCommand extends Command {
         })
 
         collector.on("collect", async button => {
-            if (button.customId === "tictactoe-delete") {
+            if (button.customId === "tictactoe-end") {
                 await button.deferUpdate()
                 collector.stop()
             }

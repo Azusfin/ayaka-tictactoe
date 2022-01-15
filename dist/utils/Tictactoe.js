@@ -76,8 +76,8 @@ class Tictactoe {
         }
         rows.push(new discord_js_1.MessageActionRow()
             .addComponents(new discord_js_1.MessageButton()
-            .setLabel("🗑️")
-            .setCustomId("tictactoe-delete")
+            .setLabel("⏰")
+            .setCustomId("tictactoe-end")
             .setDisabled(end)
             .setStyle("SUCCESS")));
         return rows;

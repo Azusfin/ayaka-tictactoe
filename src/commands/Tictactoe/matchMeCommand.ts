@@ -10,7 +10,7 @@ import { register } from "../../utils/Util";
 
 @ApplyOptions<CommandOptions>({
     name: "matchme",
-    description: "Challenge me (The Unbeatable Tictactoe AI) to play tictactoe",
+    description: "Challenge me to play tictactoe",
     preconditions: ["allowMaintenance", "GuildOnly"]
 })
 export class MatchMeCommand extends Command {
@@ -68,14 +68,14 @@ export class MatchMeCommand extends Command {
             time: 300e3,
             filter: button => (
                 ctx.user.id === button.user.id && (
-                    button.customId === "tictactoe-delete" ||
+                    button.customId === "tictactoe-end" ||
                         status === GameStatus.ONGOING
                 )
             )
         })
 
         collector.on("collect", async button => {
-            if (button.customId === "tictactoe-delete") {
+            if (button.customId === "tictactoe-end") {
                 await button.deferUpdate()
                 collector.stop()
             }
