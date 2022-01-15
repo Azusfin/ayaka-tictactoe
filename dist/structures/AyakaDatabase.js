@@ -116,7 +116,9 @@ function defaultProfile(guild, user) {
             theme: {
                 used: "Ayaka",
                 owned: ["Ayaka"]
-            }
+            },
+            dailyStreak: 0,
+            lastDaily: new Date(0)
         }
     };
 }

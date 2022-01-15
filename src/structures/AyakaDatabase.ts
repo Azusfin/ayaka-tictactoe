@@ -149,7 +149,8 @@ export interface TictactoeProfile {
     streak: number
     badges: string[]
     theme: TictactoeProfileTheme
-    lastDaily?: Date
+    dailyStreak: number
+    lastDaily: Date
 }
 
 export interface TictactoeProfileTheme {
@@ -177,7 +178,9 @@ export function defaultProfile(guild: string, user: string): Doc<TictactoeProfil
             theme: {
                 used: "Ayaka",
                 owned: ["Ayaka"]
-            }
+            },
+            dailyStreak: 0,
+            lastDaily: new Date(0)
         }
     }
 }
