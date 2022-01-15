@@ -212,17 +212,19 @@ export class MatchCommand extends Command {
 
                 const bonus = Math.floor(winnerProfile.value.streak * 1.45)
 
-                winnerProfile.value.streak++
                 winnerProfile.value.points += 1 + bonus
-
-                await db.setProfile(ctx.guildId!, winner, winnerProfile.value)
 
                 embeds.push(
                     this.makeEmbed(
                         `<@${winner}> Got 1 (+${bonus}) points\n` +
+                        `<@${winner}> Now have a total of ${winnerProfile.value.points.toLocaleString("en-us")} points\n` +
+                        `<@${winner}> Streak: ${winnerProfile.value.streak}\n` +
                         `<@${loser}> Lose their streak`
                     )
                 )
+
+                winnerProfile.value.streak++
+                await db.setProfile(ctx.guildId!, winner, winnerProfile.value)
             }
 
             await ctx.editReply({

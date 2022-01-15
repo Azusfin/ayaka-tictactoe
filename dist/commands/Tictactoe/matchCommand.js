@@ -169,11 +169,13 @@ let MatchCommand = class MatchCommand extends framework_1.Command {
                     await AyakaDatabase_1.db.setProfile(ctx.guildId, loser, loserProfile.value);
                 }
                 const bonus = Math.floor(winnerProfile.value.streak * 1.45);
-                winnerProfile.value.streak++;
                 winnerProfile.value.points += 1 + bonus;
-                await AyakaDatabase_1.db.setProfile(ctx.guildId, winner, winnerProfile.value);
                 embeds.push(this.makeEmbed(`<@${winner}> Got 1 (+${bonus}) points\n` +
+                    `<@${winner}> Now have a total of ${winnerProfile.value.points.toLocaleString("en-us")} points\n` +
+                    `<@${winner}> Streak: ${winnerProfile.value.streak}\n` +
                     `<@${loser}> Lose their streak`));
+                winnerProfile.value.streak++;
+                await AyakaDatabase_1.db.setProfile(ctx.guildId, winner, winnerProfile.value);
             }
             await ctx.editReply({
                 embeds,

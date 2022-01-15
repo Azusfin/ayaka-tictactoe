@@ -97,9 +97,12 @@ let MatchMeCommand = class MatchMeCommand extends framework_1.Command {
                     (0, AyakaDatabase_1.defaultProfile)(ctx.guildId, ctx.user.id);
                 const bonus = Math.floor(profile.value.streak * 1.45);
                 profile.value.points += 1 + bonus;
-                await AyakaDatabase_1.db.setProfile(ctx.guildId, ctx.user.id, profile.value);
                 embeds.push(this.makeEmbed(`You got 1 (+${bonus}) points\n` +
-                    "_I didn't expected you to win against me_"));
+                    `You now have a total of ${profile.value.points.toLocaleString("en-us")} points\n` +
+                    `Your streak: ${profile.value.streak}\n` +
+                    "_I didn't expect you to win against me_"));
+                profile.value.streak++;
+                await AyakaDatabase_1.db.setProfile(ctx.guildId, ctx.user.id, profile.value);
             }
             await ctx.editReply({
                 embeds,
