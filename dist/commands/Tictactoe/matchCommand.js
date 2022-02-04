@@ -130,6 +130,7 @@ let MatchCommand = class MatchCommand extends framework_1.Command {
             if (button.customId === "tictactoe-end") {
                 await button.deferUpdate();
                 collector.stop();
+                return;
             }
             const index = parseInt(button.customId.split("-")[1]);
             const columnIndex = index % 3;

@@ -159,6 +159,7 @@ export class MatchCommand extends Command {
             if (button.customId === "tictactoe-end") {
                 await button.deferUpdate()
                 collector.stop()
+                return
             }
 
             const index = parseInt(button.customId.split("-")[1])
