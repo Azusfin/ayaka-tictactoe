@@ -95,6 +95,7 @@ GiveCommand = __decorate([
     (0, decorators_1.ApplyOptions)({
         name: "give",
         description: "Give some points to another user",
+        detailedDescription: "<user> <amount>",
         preconditions: ["allowMaintenance", "GuildOnly", "noBot"]
     })
 ], GiveCommand);

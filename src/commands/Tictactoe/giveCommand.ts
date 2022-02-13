@@ -10,6 +10,7 @@ const validInteger = /^\d+$/
 @ApplyOptions<CommandOptions>({
     name: "give",
     description: "Give some points to another user",
+    detailedDescription: "<user> <amount>",
     preconditions: ["allowMaintenance", "GuildOnly", "noBot"]
 })
 export class GiveCommand extends Command {
