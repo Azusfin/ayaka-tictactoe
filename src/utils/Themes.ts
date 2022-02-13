@@ -108,13 +108,13 @@ export const Keqing: Theme = {
     }
 }
 
+export const ThemesInfo = new Map<Themes, Theme>()
+
+ThemesInfo
+    .set("Ayaka", Ayaka)
+    .set("Classy", Classy)
+    .set("Keqing", Keqing)
+
 export function themeOf(name: Themes): Theme {
-    switch (name) {
-        case "Ayaka":
-            return Ayaka
-        case "Classy":
-            return Classy
-        case "Keqing":
-            return Keqing
-    }
+    return ThemesInfo.get(name)!
 }

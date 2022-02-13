@@ -1,5 +1,9 @@
-import { resolveImage } from "canvas-constructor/cairo"
+import { resolveImage, Image } from "canvas-constructor/cairo"
 
-export const AyakaImg = resolveImage("assets/themes/Ayaka.jpg")
-export const ClassyImg = resolveImage("assets/themes/Classy.jpg")
-export const KeqingImg = resolveImage("assets/themes/Keqing.jpg")
+export const AyakaImg = resolveTheme("Ayaka")
+export const ClassyImg = resolveTheme("Classy")
+export const KeqingImg = resolveTheme("Keqing")
+
+function resolveTheme(name: string, extension = "jpg"): Promise<Image> {
+    return resolveImage(`assets/themes/${name}.${extension}`)
+}

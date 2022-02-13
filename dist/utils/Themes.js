@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.themeOf = exports.Keqing = exports.Classy = exports.Ayaka = exports.ThemesPrice = exports.ThemeNames = void 0;
+exports.themeOf = exports.ThemesInfo = exports.Keqing = exports.Classy = exports.Ayaka = exports.ThemesPrice = exports.ThemeNames = void 0;
 const ThemesImg_1 = require("./img/ThemesImg");
 exports.ThemeNames = [
     "Ayaka",
@@ -78,14 +78,12 @@ exports.Keqing = {
         }
     }
 };
+exports.ThemesInfo = new Map();
+exports.ThemesInfo
+    .set("Ayaka", exports.Ayaka)
+    .set("Classy", exports.Classy)
+    .set("Keqing", exports.Keqing);
 function themeOf(name) {
-    switch (name) {
-        case "Ayaka":
-            return exports.Ayaka;
-        case "Classy":
-            return exports.Classy;
-        case "Keqing":
-            return exports.Keqing;
-    }
+    return exports.ThemesInfo.get(name);
 }
 exports.themeOf = themeOf;
