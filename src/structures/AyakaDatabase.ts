@@ -2,6 +2,7 @@ import { Cursor, Doc, Mongo } from "aoi.mongo";
 import { DeleteResult, MongoClient, UpdateResult } from "mongodb";
 import { mongoDatabase, mongoURL } from "../config";
 import { Themes } from "../utils/Themes";
+import { Badges } from "../utils/Badges";
 
 export class AyakaDatabase {
     private profile!: Mongo<TictactoeProfile>
@@ -147,7 +148,7 @@ export interface TictactoeProfile {
     bio: string
     points: number
     streak: number
-    badges: string[]
+    badges: Badges[]
     theme: TictactoeProfileTheme
     dailyStreak: number
     lastDaily: Date
