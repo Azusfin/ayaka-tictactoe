@@ -1,4 +1,4 @@
 import { resolveImage } from "canvas-constructor/cairo";
 
-export const XImg = resolveImage("assets/X.png")
-export const OImg = resolveImage("assets/O.png")
+export const X_IMG = resolveImage("assets/X.png")
+export const O_IMG = resolveImage("assets/O.png")

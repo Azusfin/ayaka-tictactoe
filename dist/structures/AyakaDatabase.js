@@ -10,7 +10,10 @@ class AyakaDatabase {
         this.rolesCache = new Map();
     }
     async connect() {
-        if (this.profile ||
+        if (
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        this.profile ||
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             this.roles)
             return;
         const mongoClient = new mongodb_1.MongoClient(config_1.mongoURL, {

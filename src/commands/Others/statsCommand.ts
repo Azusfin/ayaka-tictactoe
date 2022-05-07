@@ -10,7 +10,7 @@ import { db } from "../../structures/AyakaDatabase";
     name: "stats",
     description: "Show the bot statistics"
 })
-export class statsCommand extends Command {
+export class StatsCommand extends Command {
     public override async chatInputRun(interaction: CommandInteraction): Promise<void> {
         const botName = this.container.client.user!.username
         const botAvatar = this.container.client.user!.displayAvatarURL({ format: "jpg" })

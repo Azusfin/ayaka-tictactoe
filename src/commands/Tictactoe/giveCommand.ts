@@ -28,7 +28,7 @@ export class GiveCommand extends Command {
         if (amount > profile.points) {
             await ctx.editReply({
                 embeds: [this.makeEmbed(
-                    `You cannot give them more than what you have\n` +
+                    "You cannot give them more than what you have\n" +
                     `Current Points: ${profile.points.toLocaleString("en-us")}\n` +
                     `Amount To GIve: ${amount.toLocaleString("en-us")}`
                 )]

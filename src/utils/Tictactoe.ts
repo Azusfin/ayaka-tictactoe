@@ -1,13 +1,14 @@
+/* eslint-disable no-nested-ternary */
 import { Theme } from "./Themes"
 import { Canvas } from "canvas-constructor/cairo"
-import { OImg, XImg } from "./img/XO"
+import { O_IMG, X_IMG } from "./img/XO"
 import TictactoeEngine, { Player, Cell, GameStatus } from "tic-tac-toe-minimax-engine"
 import { MessageActionRow, MessageAttachment, MessageButton, MessageEmbed } from "discord.js"
 import { numEmojis } from "./Util"
 import { embedColor } from "../config"
 
-export type guildGames = Map<string, Tictactoe>
-export const guildsGames = new Map<string, guildGames>()
+export type GuildGames = Map<string, Tictactoe>
+export const guildsGames = new Map<string, GuildGames>()
 
 export class Tictactoe {
     public theme: Theme
@@ -15,12 +16,18 @@ export class Tictactoe {
     public engine: TictactoeEngine
     public turn: Player
     public cells = [
-        Cell.EMPTY, Cell.EMPTY, Cell.EMPTY,
-        Cell.EMPTY, Cell.EMPTY, Cell.EMPTY,
-        Cell.EMPTY, Cell.EMPTY, Cell.EMPTY
+        Cell.EMPTY,
+        Cell.EMPTY,
+        Cell.EMPTY,
+        Cell.EMPTY,
+        Cell.EMPTY,
+        Cell.EMPTY,
+        Cell.EMPTY,
+        Cell.EMPTY,
+        Cell.EMPTY
     ]
 
-    public constructor(theme: Theme, players: [string, string], firstTurn: boolean) {
+    constructor(theme: Theme, players: [string, string], firstTurn: boolean) {
         this.theme = theme
         this.players = players
         this.turn = firstTurn ? Player.PLAYER_ONE : Player.PLAYER_TWO
@@ -142,8 +149,8 @@ export class Tictactoe {
         const img = await theme.img
         canvas.printImage(img, 0, 0)
 
-        const xImg = await XImg
-        const oImg = await OImg
+        const xImg = await X_IMG
+        const oImg = await O_IMG
 
         for (let i = 0; i < cells.length; i++) {
             const cell = cells[i]

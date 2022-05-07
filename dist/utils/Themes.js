@@ -1,19 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.themeOf = exports.ThemesInfo = exports.Keqing = exports.Classy = exports.Ayaka = exports.ThemesPrice = exports.ThemeNames = void 0;
+exports.themeOf = exports.THEMES_INFO = exports.KEQING = exports.CLASSY = exports.AYAKA = exports.THEMES_PRICE = exports.THEME_NAMES = void 0;
 const ThemesImg_1 = require("./img/ThemesImg");
-exports.ThemeNames = [
+exports.THEME_NAMES = [
     "Ayaka",
     "Classy",
     "Keqing"
 ];
-exports.ThemesPrice = new Map();
-exports.ThemesPrice
+exports.THEMES_PRICE = new Map();
+exports.THEMES_PRICE
     .set("Ayaka", 0)
     .set("Classy", 150)
     .set("Keqing", 350);
-exports.Ayaka = {
-    img: ThemesImg_1.AyakaImg,
+exports.AYAKA = {
+    img: ThemesImg_1.AYAKA_IMG,
     quality: 0.5,
     lineOffset: 134,
     size: {
@@ -34,8 +34,8 @@ exports.Ayaka = {
         }
     }
 };
-exports.Classy = {
-    img: ThemesImg_1.ClassyImg,
+exports.CLASSY = {
+    img: ThemesImg_1.CLASSY_IMG,
     quality: 0.6,
     lineOffset: 175,
     size: {
@@ -56,8 +56,8 @@ exports.Classy = {
         }
     }
 };
-exports.Keqing = {
-    img: ThemesImg_1.KeqingImg,
+exports.KEQING = {
+    img: ThemesImg_1.KEQING_IMG,
     quality: 0.35,
     lineOffset: 182,
     size: {
@@ -78,12 +78,12 @@ exports.Keqing = {
         }
     }
 };
-exports.ThemesInfo = new Map();
-exports.ThemesInfo
-    .set("Ayaka", exports.Ayaka)
-    .set("Classy", exports.Classy)
-    .set("Keqing", exports.Keqing);
+exports.THEMES_INFO = new Map();
+exports.THEMES_INFO
+    .set("Ayaka", exports.AYAKA)
+    .set("Classy", exports.CLASSY)
+    .set("Keqing", exports.KEQING);
 function themeOf(name) {
-    return exports.ThemesInfo.get(name);
+    return exports.THEMES_INFO.get(name);
 }
 exports.themeOf = themeOf;

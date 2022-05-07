@@ -4,7 +4,7 @@ import { MessageEmbed, CommandInteraction, Message } from "discord.js";
 import { Cell, GameStatus } from "tic-tac-toe-minimax-engine";
 import { embedColor } from "../../config";
 import { db, defaultProfile } from "../../structures/AyakaDatabase";
-import { Ayaka, themeOf } from "../../utils/Themes";
+import { AYAKA, themeOf } from "../../utils/Themes";
 import { guildsGames, Tictactoe } from "../../utils/Tictactoe";
 import { register } from "../../utils/Util";
 
@@ -23,7 +23,7 @@ export class MatchMeCommand extends Command {
         if (game) {
             await ctx.reply({
                 ephemeral: true,
-                embeds: [this.makeEmbed(`You still had a game with <@${game.players.find(id => id !== ctx.user.id)}>`)]
+                embeds: [this.makeEmbed(`You still had a game with <@${game.players.find(id => id !== ctx.user.id)!}>`)]
             })
             return
         }
@@ -35,7 +35,7 @@ export class MatchMeCommand extends Command {
             : [clientID, ctx.user.id]
         const firstTurn = Math.random() > 0.5
 
-        game = new Tictactoe(Ayaka, players, firstTurn)
+        game = new Tictactoe(AYAKA, players, firstTurn)
         games.set(ctx.user.id, game)
 
         guildsGames.set(ctx.guildId!, games)
@@ -66,12 +66,11 @@ export class MatchMeCommand extends Command {
         const collector = msg.createMessageComponentCollector({
             componentType: "BUTTON",
             time: 300e3,
-            filter: button => (
-                ctx.user.id === button.user.id && (
-                    button.customId === "tictactoe-end" ||
+            filter: button => ctx.user.id === button.user.id && (
+                button.customId === "tictactoe-end" ||
                         status === GameStatus.ONGOING
-                )
             )
+
         })
 
         collector.on("collect", async button => {

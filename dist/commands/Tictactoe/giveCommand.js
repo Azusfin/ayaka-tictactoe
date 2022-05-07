@@ -23,7 +23,7 @@ let GiveCommand = class GiveCommand extends framework_1.Command {
             (0, AyakaDatabase_1.defaultProfile)(ctx.guildId, ctx.user.id)).value;
         if (amount > profile.points) {
             await ctx.editReply({
-                embeds: [this.makeEmbed(`You cannot give them more than what you have\n` +
+                embeds: [this.makeEmbed("You cannot give them more than what you have\n" +
                         `Current Points: ${profile.points.toLocaleString("en-us")}\n` +
                         `Amount To GIve: ${amount.toLocaleString("en-us")}`)]
             });

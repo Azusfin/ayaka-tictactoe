@@ -13,7 +13,9 @@ export class AyakaDatabase {
 
     public async connect(): Promise<void> {
         if (
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             this.profile ||
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             this.roles
         ) return
 

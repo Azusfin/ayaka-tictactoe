@@ -9,7 +9,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.statsCommand = void 0;
+exports.StatsCommand = void 0;
 const decorators_1 = require("@sapphire/decorators");
 const framework_1 = require("@sapphire/framework");
 const discord_js_1 = require("discord.js");
@@ -17,7 +17,7 @@ const config_1 = require("../../config");
 const humanize_duration_1 = __importDefault(require("humanize-duration"));
 const Util_1 = require("../../utils/Util");
 const AyakaDatabase_1 = require("../../structures/AyakaDatabase");
-let statsCommand = class statsCommand extends framework_1.Command {
+let StatsCommand = class StatsCommand extends framework_1.Command {
     async chatInputRun(interaction) {
         const botName = this.container.client.user.username;
         const botAvatar = this.container.client.user.displayAvatarURL({ format: "jpg" });
@@ -83,10 +83,10 @@ let statsCommand = class statsCommand extends framework_1.Command {
             .setDescription(this.description));
     }
 };
-statsCommand = __decorate([
+StatsCommand = __decorate([
     (0, decorators_1.ApplyOptions)({
         name: "stats",
         description: "Show the bot statistics"
     })
-], statsCommand);
-exports.statsCommand = statsCommand;
+], StatsCommand);
+exports.StatsCommand = StatsCommand;

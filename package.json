@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/Azusfin/ayaka-tictactoe#readme",
   "dependencies": {
+    "@azusfin/eslint-config": "^1.2.1",
     "@discordjs/builders": "^0.11.0",
     "@sapphire/decorators": "^3.1.4",
     "@sapphire/framework": "^3.0.0-next.506fd58.0",
@@ -37,7 +38,6 @@
     "tic-tac-toe-minimax-engine": "^1.0.8"
   },
   "devDependencies": {
-    "@hazmi35/eslint-config": "^7.0.1",
     "@types/humanize-duration": "^3.27.1",
     "@typescript-eslint/eslint-plugin": "^5.8.1",
     "@typescript-eslint/parser": "^5.8.1",

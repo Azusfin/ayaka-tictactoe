@@ -103,7 +103,7 @@ let MatchCommand = class MatchCommand extends framework_1.Command {
             ? [ctx.user.id, user.id]
             : [user.id, ctx.user.id];
         const firstTurn = Math.random() > 0.5;
-        game = new Tictactoe_1.Tictactoe(Themes_1.Ayaka, players, firstTurn);
+        game = new Tictactoe_1.Tictactoe(Themes_1.AYAKA, players, firstTurn);
         games.set(ctx.user.id, game);
         games.set(user.id, game);
         Tictactoe_1.guildsGames.set(ctx.guildId, games);
@@ -121,6 +121,7 @@ let MatchCommand = class MatchCommand extends framework_1.Command {
         const collector = msg.createMessageComponentCollector({
             componentType: "BUTTON",
             time: 300e3,
+            // eslint-disable-next-line @typescript-eslint/no-extra-parens
             filter: button => (button.customId !== "tictactoe-end"
                 ? status === tic_tac_toe_minimax_engine_1.GameStatus.ONGOING &&
                     game.players[game.playerID] === button.user.id

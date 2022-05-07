@@ -1,42 +1,42 @@
 import { Canvas, Image } from "canvas-constructor/cairo"
-import { XORed, XOGreen, XOBlue } from "./img/BadgesImg"
+import { XO_RED, XO_BLUE, XO_GREEN } from "./img/BadgesImg"
 
-export const BadgeNames = [
+export const BADGE_NAMES = [
     "XORed",
     "XOGreen",
     "XOBlue"
 ] as const
 
-export type Badges = typeof BadgeNames extends readonly (infer E)[] ? E : never
+export type Badges = typeof BADGE_NAMES extends readonly (infer E)[] ? E : never
 
-export const BadgesPrice = new Map<Badges, number>()
+export const BADGES_PRICE = new Map<Badges, number>()
 
-BadgesPrice
+BADGES_PRICE
     .set("XORed", 90)
     .set("XOGreen", 90)
     .set("XOBlue", 90)
 
-export const BadgesImg = new Map<Badges, Promise<Image>>()
+export const BADGES_IMG = new Map<Badges, Promise<Image>>()
 
-BadgesImg
-    .set("XORed", XORed)
-    .set("XOGreen", XOGreen)
-    .set("XOBlue", XOBlue)
+BADGES_IMG
+    .set("XORed", XO_RED)
+    .set("XOGreen", XO_GREEN)
+    .set("XOBlue", XO_BLUE)
 
-const CanvasSize = 480
-const CoordinateStart = 20
-const BadgeSize = 440
-const BadgeDistance = 40
+const CANVAS_SIZE = 480
+const COORDINATE_START = 20
+const BADGE_SIZE = 440
+const BADGE_DISTANCE = 40
 
 export async function drawBadges(badges: Badges[]): Promise<Buffer> {
-    const canvas = new Canvas(CanvasSize, CanvasSize)
+    const canvas = new Canvas(CANVAS_SIZE, CANVAS_SIZE)
 
     const dimension = Math.ceil(Math.sqrt(badges.length))
     const ratio = 1 / dimension
 
-    const start = ratio * CoordinateStart
-    const size = ratio * BadgeSize
-    const distance = ratio * BadgeDistance
+    const start = ratio * COORDINATE_START
+    const size = ratio * BADGE_SIZE
+    const distance = ratio * BADGE_DISTANCE
 
     let index = 0
     let x = start
@@ -50,7 +50,7 @@ export async function drawBadges(badges: Badges[]): Promise<Buffer> {
         const horizontal = Math.min(dimension, badges.length - 1 - index + 1)
 
         for (let j = 0; j < horizontal; j++) {
-            const img = await BadgesImg.get(badges[index++])!
+            const img = await BADGES_IMG.get(badges[index++])!
 
             canvas.printImage(img, x, y, size, size)
 

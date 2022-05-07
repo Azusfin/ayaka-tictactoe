@@ -4,7 +4,7 @@ import { CommandInteraction, Message, MessageActionRow, MessageButton, MessageEm
 import { Cell, GameStatus } from "tic-tac-toe-minimax-engine";
 import { embedColor } from "../../config";
 import { db, defaultProfile } from "../../structures/AyakaDatabase";
-import { Ayaka, themeOf } from "../../utils/Themes";
+import { AYAKA, themeOf } from "../../utils/Themes";
 import { guildsGames, Tictactoe } from "../../utils/Tictactoe";
 import { register } from "../../utils/Util"
 
@@ -32,7 +32,7 @@ export class MatchCommand extends Command {
         if (game) {
             await ctx.reply({
                 ephemeral: true,
-                embeds: [this.makeEmbed(`You still had a game with <@${game.players.find(id => id !== ctx.user.id)}>`)]
+                embeds: [this.makeEmbed(`You still had a game with <@${game.players.find(id => id !== ctx.user.id)!}>`)]
             })
             return
         }
@@ -42,7 +42,7 @@ export class MatchCommand extends Command {
         if (game) {
             await ctx.reply({
                 ephemeral: true,
-                embeds: [this.makeEmbed(`They still had a game with <@${game.players.find(id => id !== user.id)}>`)]
+                embeds: [this.makeEmbed(`They still had a game with <@${game.players.find(id => id !== user.id)!}>`)]
             })
             return
         }
@@ -98,7 +98,7 @@ export class MatchCommand extends Command {
 
         if (game) {
             await ctx.editReply({
-                embeds: [this.makeEmbed(`You still had a game with <@${game.players.find(id => id !== ctx.user.id)}>`)],
+                embeds: [this.makeEmbed(`You still had a game with <@${game.players.find(id => id !== ctx.user.id)!}>`)],
                 components: []
             })
             return
@@ -108,7 +108,7 @@ export class MatchCommand extends Command {
 
         if (game) {
             await ctx.editReply({
-                embeds: [this.makeEmbed(`They still had a game with <@${game.players.find(id => id !== user.id)}>`)],
+                embeds: [this.makeEmbed(`They still had a game with <@${game.players.find(id => id !== user.id)!}>`)],
                 components: []
             })
             return
@@ -119,7 +119,7 @@ export class MatchCommand extends Command {
             : [user.id, ctx.user.id]
         const firstTurn = Math.random() > 0.5
 
-        game = new Tictactoe(Ayaka, players, firstTurn)
+        game = new Tictactoe(AYAKA, players, firstTurn)
 
         games.set(ctx.user.id, game)
         games.set(user.id, game)
@@ -147,12 +147,12 @@ export class MatchCommand extends Command {
         const collector = msg.createMessageComponentCollector({
             componentType: "BUTTON",
             time: 300e3,
-            filter: button => (
-                button.customId !== "tictactoe-end"
-                    ? status === GameStatus.ONGOING &&
-                        game!.players[game!.playerID] === button.user.id
-                    : game!.players.includes(button.user.id)
-            )
+            // eslint-disable-next-line @typescript-eslint/no-extra-parens
+            filter: button => (button.customId !== "tictactoe-end"
+                ? status === GameStatus.ONGOING &&
+                    game!.players[game!.playerID] === button.user.id
+                : game!.players.includes(button.user.id))
+
         })
 
         collector.on("collect", async button => {

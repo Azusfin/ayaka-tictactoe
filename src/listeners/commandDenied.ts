@@ -18,6 +18,7 @@ export class CommandDeniedEvent extends Listener {
             "-", "Guild:", interaction.guild?.id ?? "N/A"
         )
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         if (Reflect.get(Object(context), "silent")) return
 
         void interaction.reply({

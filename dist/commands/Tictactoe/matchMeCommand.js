@@ -33,7 +33,7 @@ let MatchMeCommand = class MatchMeCommand extends framework_1.Command {
             ? [ctx.user.id, clientID]
             : [clientID, ctx.user.id];
         const firstTurn = Math.random() > 0.5;
-        game = new Tictactoe_1.Tictactoe(Themes_1.Ayaka, players, firstTurn);
+        game = new Tictactoe_1.Tictactoe(Themes_1.AYAKA, players, firstTurn);
         games.set(ctx.user.id, game);
         Tictactoe_1.guildsGames.set(ctx.guildId, games);
         const authorProfile = (await AyakaDatabase_1.db.getProfile(ctx.guildId, ctx.user.id) ??
@@ -54,8 +54,8 @@ let MatchMeCommand = class MatchMeCommand extends framework_1.Command {
         const collector = msg.createMessageComponentCollector({
             componentType: "BUTTON",
             time: 300e3,
-            filter: button => (ctx.user.id === button.user.id && (button.customId === "tictactoe-end" ||
-                status === tic_tac_toe_minimax_engine_1.GameStatus.ONGOING))
+            filter: button => ctx.user.id === button.user.id && (button.customId === "tictactoe-end" ||
+                status === tic_tac_toe_minimax_engine_1.GameStatus.ONGOING)
         });
         collector.on("collect", async (button) => {
             if (button.customId === "tictactoe-end") {

@@ -1,5 +1,5 @@
-import { Image } from "canvas-constructor/cairo";
-import { AyakaImg, ClassyImg, KeqingImg } from "./img/ThemesImg";
+import { Image } from "canvas-constructor/cairo"
+import { AYAKA_IMG, CLASSY_IMG, KEQING_IMG } from "./img/ThemesImg"
 
 export interface Theme {
     img: Promise<Image>
@@ -24,23 +24,23 @@ export interface Theme {
     }
 }
 
-export const ThemeNames = [
+export const THEME_NAMES = [
     "Ayaka",
     "Classy",
     "Keqing"
 ] as const
 
-export type Themes = typeof ThemeNames extends readonly (infer E)[] ? E : never
+export type Themes = typeof THEME_NAMES extends readonly (infer E)[] ? E : never
 
-export const ThemesPrice = new Map<Themes, number>()
+export const THEMES_PRICE = new Map<Themes, number>()
 
-ThemesPrice
+THEMES_PRICE
     .set("Ayaka", 0)
     .set("Classy", 150)
     .set("Keqing", 350)
 
-export const Ayaka: Theme = {
-    img: AyakaImg,
+export const AYAKA: Theme = {
+    img: AYAKA_IMG,
     quality: 0.5,
     lineOffset: 134,
     size: {
@@ -62,8 +62,8 @@ export const Ayaka: Theme = {
     }
 }
 
-export const Classy: Theme = {
-    img: ClassyImg,
+export const CLASSY: Theme = {
+    img: CLASSY_IMG,
     quality: 0.6,
     lineOffset: 175,
     size: {
@@ -85,8 +85,8 @@ export const Classy: Theme = {
     }
 }
 
-export const Keqing: Theme = {
-    img: KeqingImg,
+export const KEQING: Theme = {
+    img: KEQING_IMG,
     quality: 0.35,
     lineOffset: 182,
     size: {
@@ -108,13 +108,13 @@ export const Keqing: Theme = {
     }
 }
 
-export const ThemesInfo = new Map<Themes, Theme>()
+export const THEMES_INFO = new Map<Themes, Theme>()
 
-ThemesInfo
-    .set("Ayaka", Ayaka)
-    .set("Classy", Classy)
-    .set("Keqing", Keqing)
+THEMES_INFO
+    .set("Ayaka", AYAKA)
+    .set("Classy", CLASSY)
+    .set("Keqing", KEQING)
 
 export function themeOf(name: Themes): Theme {
-    return ThemesInfo.get(name)!
+    return THEMES_INFO.get(name)!
 }

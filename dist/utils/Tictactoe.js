@@ -30,9 +30,15 @@ exports.guildsGames = new Map();
 class Tictactoe {
     constructor(theme, players, firstTurn) {
         this.cells = [
-            tic_tac_toe_minimax_engine_1.Cell.EMPTY, tic_tac_toe_minimax_engine_1.Cell.EMPTY, tic_tac_toe_minimax_engine_1.Cell.EMPTY,
-            tic_tac_toe_minimax_engine_1.Cell.EMPTY, tic_tac_toe_minimax_engine_1.Cell.EMPTY, tic_tac_toe_minimax_engine_1.Cell.EMPTY,
-            tic_tac_toe_minimax_engine_1.Cell.EMPTY, tic_tac_toe_minimax_engine_1.Cell.EMPTY, tic_tac_toe_minimax_engine_1.Cell.EMPTY
+            tic_tac_toe_minimax_engine_1.Cell.EMPTY,
+            tic_tac_toe_minimax_engine_1.Cell.EMPTY,
+            tic_tac_toe_minimax_engine_1.Cell.EMPTY,
+            tic_tac_toe_minimax_engine_1.Cell.EMPTY,
+            tic_tac_toe_minimax_engine_1.Cell.EMPTY,
+            tic_tac_toe_minimax_engine_1.Cell.EMPTY,
+            tic_tac_toe_minimax_engine_1.Cell.EMPTY,
+            tic_tac_toe_minimax_engine_1.Cell.EMPTY,
+            tic_tac_toe_minimax_engine_1.Cell.EMPTY
         ];
         this.theme = theme;
         this.players = players;
@@ -128,8 +134,8 @@ class Tictactoe {
         const canvas = new cairo_1.Canvas(theme.size.width, theme.size.height);
         const img = await theme.img;
         canvas.printImage(img, 0, 0);
-        const xImg = await XO_1.XImg;
-        const oImg = await XO_1.OImg;
+        const xImg = await XO_1.X_IMG;
+        const oImg = await XO_1.O_IMG;
         for (let i = 0; i < cells.length; i++) {
             const cell = cells[i];
             if (cell === tic_tac_toe_minimax_engine_1.Cell.EMPTY)
